@@ -48,7 +48,9 @@ class Approvals(discord.ui.View):
         await interaction.response.defer(ephemeral=True)
         user = interaction.guild.get_member(userid)  # type: ignore
         if not user:
-            return await interaction.followup.send("User not found. They might have left the server.", ephemeral=True)
+            await interaction.followup.send("User not found. They might have left the server. The embed will be auto-deleted in 5 seconds.", ephemeral=True)
+            await asyncio.sleep(5)
+            return await interaction.delete_original_response()
 
         await interaction.followup.send(f"{consts.GREEN_TICK} Accepted {user} (`{user.id}`) to the server. The embed will be auto-deleted in 5 seconds.", ephemeral=True)
         
@@ -71,7 +73,10 @@ class Approvals(discord.ui.View):
         await interaction.response.defer(ephemeral=True)
         user = interaction.guild.get_member(userid)  # type: ignore
         if not user:
-            return await interaction.followup.send("User not found. They might have left the server.", ephemeral=True)
+            await interaction.followup.send("User not found. They might have left the server. The embed will be auto-deleted in 5 seconds.", ephemeral=True)
+            await asyncio.sleep(5)
+            return await interaction.delete_original_response()
+
 
         await interaction.followup.send(f"{consts.RED_TICK} Declined {user} (`{user.id}`) from the server. The embed will be auto-deleted in 5 seconds.", ephemeral=True)
 

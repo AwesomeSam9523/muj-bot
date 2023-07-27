@@ -62,6 +62,7 @@ class Approvals(discord.ui.View):
         await bot.pool.execute(query, mod.id, datetime.datetime.utcnow(), self.uuid)
         await user.send(f"{consts.GREEN_TICK} Your verification request has been accepted. Welcome to the server!")
         await user.add_roles(bot.roles["membership"])
+        await bot.get_channel(1134017263096311908).send(f"Everyone welcome {user.mention} to the server 🎉. Say Hi!") # type: ignore
         await asyncio.sleep(5)
         await interaction.delete_original_response()
     

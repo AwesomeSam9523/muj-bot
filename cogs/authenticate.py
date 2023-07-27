@@ -147,6 +147,20 @@ async def send_verification_embed(user: Union[discord.User, discord.Member], lin
 class Authenticator(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
+    
+    @commands.Cog.listener()
+    async def on_member_join(self, member: discord.Member):
+        member_id = member.id
+        logger.info("Member %s (%s) joined the server", member_id, str(member))
+        query = """
+        SELECT * FROM verifications
+        WHERE "user" = $1 AND "status" = 'accepted'
+        """
+        result = await bot.pool.fetchrow(query, member_id)
+        if result:
+            await member.add_roles(bot.roles["membership"])
+            await member.send(f"{consts.GREEN_TICK} You have been automatically verified. Welcome to the server!")
+
 
     @discord.ui.button(label='Start', style=discord.ButtonStyle.blurple, custom_id='authenticator_start2', emoji='🔒')
     async def start_authentication(self, interaction: discord.Interaction, button: discord.ui.Button):
